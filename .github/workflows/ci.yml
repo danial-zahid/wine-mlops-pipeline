@@ -10,7 +10,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python 3.10
@@ -23,15 +23,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint with flake8
-        run: flake8 src/ tests/ --max-line-length=100
+      - name: Run linter
+        run: python -m flake8 src/ tests/ --max-line-length=100
 
-      - name: Run training pipeline
-        run: python src/train.py
+      - name: Run Model Training & MLflow Setup
+        run: python -m src.train
         env:
           PYTHONPATH: .
 
-      - name: Run tests and quality gate
-        run: pytest tests/ -v
+      - name: Run Tests & Quality Gate
+        run: python -m pytest tests/ -v
         env:
           PYTHONPATH: .
